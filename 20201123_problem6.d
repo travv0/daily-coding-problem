@@ -5,12 +5,22 @@ nothrow:
 
 void main() {
     LinkedList!int list;
+
+    assert(list.get(0) is null);
+
     list.add(1);
+
+    assert(list.get(0).val == 1);
+    assert(list.get(1) is null);
+
     list.add(2);
     list.add(3);
 
-    foreach (i; 0 .. 3) {
-        assert(list.get(i).val == i + 1);
+    foreach (i; 0 .. 4) {
+        const node = list.get(i);
+        if (node !is null) {
+            assert(node.val == i + 1);
+        }
     }
 }
 
@@ -27,7 +37,7 @@ private struct LinkedList(T) {
         auto node = new Node(element);
         auto oldEnd = end;
         end = node;
-        if (oldEnd == null) {
+        if (oldEnd is null) {
             start = node;
         } else {
             end.both ^= cast(ulong)oldEnd;
@@ -36,9 +46,13 @@ private struct LinkedList(T) {
     }
 
     Node* get(ulong index) {
+        if (start is null)
+            return null;
         auto node = start;
         auto next = start.both;
         foreach (i; 0 .. index) {
+            if (next == 0)
+                return null;
             const temp = node;
             node = cast(Node*)next;
             next = node.both ^ cast(ulong)temp;
