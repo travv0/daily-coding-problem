@@ -1,6 +1,8 @@
 module problem6;
 
-pure:
+import core.stdc.stdlib : malloc, free;
+
+@nogc:
 nothrow:
 
 void main() {
@@ -8,15 +10,10 @@ void main() {
 
     assert(list.get(0) is null);
 
-    list.add(1);
+    foreach (i; 1 .. 10_001)
+        list.add(i);
 
-    assert(list.get(0).val == 1);
-    assert(list.get(1) is null);
-
-    list.add(2);
-    list.add(3);
-
-    foreach (i; 0 .. 4) {
+    foreach (i; 0 .. 10_000) {
         const node = list.get(i);
         if (node !is null) {
             assert(node.val == i + 1);
@@ -34,7 +31,8 @@ private struct LinkedList(T) {
     Node* end = null;
 
     void add(T element) {
-        auto node = new Node(element);
+        Node* node = cast(Node*)malloc(Node.sizeof);
+        *node = Node(element);
         auto oldEnd = end;
         end = node;
         if (oldEnd is null) {
@@ -53,10 +51,25 @@ private struct LinkedList(T) {
         foreach (i; 0 .. index) {
             if (next == 0)
                 return null;
-            const temp = node;
+            const temp = cast(ulong)node;
             node = cast(Node*)next;
-            next = node.both ^ cast(ulong)temp;
+            next = node.both ^ temp;
         }
         return node;
+    }
+
+    ~this() {
+        if (start is null)
+            return;
+        auto node = start;
+        auto next = start.both;
+        while (true) {
+            const temp = cast(ulong)node;
+            free(node);
+            if (next == 0)
+                break;
+            node = cast(Node*)next;
+            next = node.both ^ temp;
+        }
     }
 }
