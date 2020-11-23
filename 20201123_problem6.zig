@@ -58,15 +58,15 @@ fn LinkedList(comptime T: type) type {
         }
 
         fn add(self: *Self, element: T) !void {
-            var node = try self.allocator.create(Node);
-            node.* = Node{ .val = element };
-            var oldEnd = self.end;
-            self.end = node;
-            if (oldEnd == null) {
-                self.start = node;
+            var new_end = try self.allocator.create(Node);
+            new_end.* = Node{ .val = element };
+            const old_end = self.end;
+            self.end = new_end;
+            if (old_end) |oe| {
+                new_end.both ^= @ptrToInt(oe);
+                oe.both ^= @ptrToInt(new_end);
             } else {
-                self.end.?.both ^= @ptrToInt(oldEnd);
-                oldEnd.?.both ^= @ptrToInt(self.end.?);
+                self.start = new_end;
             }
         }
 
