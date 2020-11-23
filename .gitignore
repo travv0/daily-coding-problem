@@ -1,2 +1,3 @@
 *.exe
 *.obj
+zig-cache/

@@ -2,15 +2,19 @@ module problem1;
 
 import std.stdio;
 
-void main() {
-}
+@safe:
+pure:
+nothrow:
 
-unittest {
+void main() {
     assert([10, 15, 3, 7].addsUpTo(17));
     assert(![10, 15, 3, 8].addsUpTo(17));
+
+    assert([10, 15, 3, 7].addsUpToBonus(17));
+    assert(![10, 15, 3, 8].addsUpToBonus(17));
 }
 
-private bool addsUpTo(int[] nums, int check) {
+private bool addsUpTo(int[] nums, int check) @nogc {
     foreach (i, num; nums) {
         foreach (num2; nums[i + 1 .. $]) {
             if (num + num2 == check)
@@ -18,11 +22,6 @@ private bool addsUpTo(int[] nums, int check) {
         }
     }
     return false;
-}
-
-unittest {
-    assert([10, 15, 3, 7].addsUpToBonus(17));
-    assert(![10, 15, 3, 8].addsUpToBonus(17));
 }
 
 private bool addsUpToBonus(int[] nums, int check) {
