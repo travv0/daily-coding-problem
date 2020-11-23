@@ -16,5 +16,5 @@ def cdr(pair):
     return pair(second)
 
 
-print("car(cons(3, 4)) ==", car(cons(3, 4)))
-print("cdr(cons(3, 4)) ==", cdr(cons(3, 4)))
+assert car(cons(3, 4)) == 3
+assert cdr(cons(3, 4)) == 4

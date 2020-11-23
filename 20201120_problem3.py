@@ -22,12 +22,11 @@ def deserialize(s):
 
 def serialize(node):
     if node:
-        return str(node.val).replace(',', ',,').replace('None', 'NoneNone') + ' , ' + serialize(node.left) + ' , ' + serialize(node.right)
+        val = str(node.val).replace(',', ',,').replace('None', 'NoneNone')
+        return val + ' , ' + serialize(node.left) + ' , ' + serialize(node.right)
     else:
         return 'None'
 
 
-node = Node('root', Node('None', Node('left,left')), Node('right'))
-print('Node(''root'', Node(''None'', Node(''left,left'')), Node(''right'')) ==',
-      deserialize(serialize(node)))
-assert deserialize(serialize(node)).left.left.val == 'left,left'
+node = Node('root', Node('left', Node('left.left')), Node('right'))
+assert deserialize(serialize(node)).left.left.val == 'left.left'
