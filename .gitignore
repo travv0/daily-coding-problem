@@ -7,3 +7,5 @@ zig-cache/
 *~
 \#*
 *.fasl
+*.pdb
+target/
