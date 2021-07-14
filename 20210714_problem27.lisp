@@ -1,0 +1,16 @@
+(defun check-balance (string)
+  (let ((stack '())
+        (complements '((#\) . #\()
+                       (#\] . #\[)
+                       (#\} . #\{))))
+    (loop for c across string
+          do (case c
+               ((#\( #\[ #\{)
+                (push c stack))
+               ((#\) #\] #\})
+                (let ((complement (assoc-value complements c)))
+                  (if (char= (car stack) complement)
+                      (pop stack)
+                      (return))))
+               (t (error "invalid character in string: ~s" c))))
+    (null stack)))
